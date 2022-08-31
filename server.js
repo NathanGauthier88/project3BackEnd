@@ -1,5 +1,9 @@
 // Dependancies 
 const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const logger = require('morgan');
+const grapplerRouter = require('./controllers/grapplers');
 
 //Initialize the app
 
@@ -12,13 +16,30 @@ const { PORT = 4000, DATABASE_URL } = process.env;
 
 
 // Connect to MongoDb using Mongoose
+mongoose.connect(DATABASE_URL);
 
 // Mount Middleware
+app.use(express.json());
+app.use(cors());
+app.use(logger('dev'));
+
+
+mongoose.connection
+.on('connected', () => console.log('Connected to MongoDB'))
+.on('error', (error) => console.log('MongoDB Error:' + error.message));
+
+
 
 // Mount Routes
 app.get('/', (req, res) => {
-    res.send('Hello World');
-})
+    res.send('Welcome to Grappler API');
+});
+
+app.use('/api/grappler', grapplerRouter);
+
+app.get('/*', (req, res) => {
+    res.status(404).json({ message: 'not found'})
+});
 
 // Tell the App to Listen
 app.listen(PORT, () => {
