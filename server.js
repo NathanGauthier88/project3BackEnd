@@ -60,7 +60,7 @@ app.get('/grappler', async (req, res) => {
     try {
         res.status(200).json(await Grappler.find({}));
     } catch (error) {
-        res.status(400).json({ message: 'bad request'})    
+        res.status(400).json({ message: 'bad request' });    
     }
 });
 
@@ -70,7 +70,31 @@ app.post('/grappler', async (req, res) => {
     try {
         res.status(201).json(await Grappler.create(req.body))
     } catch (error) {
-        res.status(400).json({ message: 'bad request'});
+        res.status(400).json({ message: 'bad request' });
+    }
+});
+
+// delete 
+
+app.delete('/grappler/:id', async (req, res) => {
+    try {
+        res.status(200).json(await Grappler.findByIdAndDelete(req.params.id));
+    } catch (error) {
+        res.status(400).json({ message: 'bad request' });
+    }
+});
+
+// update
+
+app.put('/grappler/:id', async (req, res) => {
+    try {
+        res.status(200).json(await Grappler.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        ));
+    } catch (error) {
+        res.status(400).json({ message: 'bad request' });
     }
 });
 
