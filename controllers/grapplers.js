@@ -16,6 +16,13 @@ router.get('/', async (req, res) => {
 // Create 
 
 router.post('/', async (req, res) => {
+
+    for(let key in req.body) {
+        if(req.body[key] === '') {
+            delete req.body[key];
+        }
+    }
+
     try {
         res.status(201).json(await Grappler.create(req.body))
     } catch (error) {
